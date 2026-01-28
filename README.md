@@ -2,6 +2,25 @@
 
 > **Disclaimer**: This repository is provided as a demonstration only. No support is provided.
 
+- [XMTP Chain RPC Node](#xmtp-chain-rpc-node)
+  - [Node Role](#node-role)
+  - [Architecture](#architecture)
+  - [XMTP Ropsten Network Details](#xmtp-ropsten-network-details)
+  - [Quick Start](#quick-start)
+  - [Hardware Requirements](#hardware-requirements)
+  - [Configuration Parameters Explained](#configuration-parameters-explained)
+    - [Chain Configuration](#chain-configuration)
+    - [Data Sources](#data-sources)
+    - [Transaction Forwarding](#transaction-forwarding)
+    - [Archive Mode (for Indexers)](#archive-mode-for-indexers)
+    - [Disabled Features (Read-Only Node)](#disabled-features-read-only-node)
+    - [RPC Exposure](#rpc-exposure)
+    - [Other](#other)
+  - [Snapshot Initialization (Optional)](#snapshot-initialization-optional)
+  - [Metrics (Optional)](#metrics-optional)
+  - [Resources](#resources)
+  - [Support](#support)
+
 This repository demonstrates how to run an **XMTP Chain full node** for read-only purposes. The node syncs chain state locally and exposes JSON-RPC and WebSocket endpoints for indexers, explorers, or other services to query.
 
 ## Node Role
@@ -37,6 +56,8 @@ There is no P2P gossip or enode-based peer discovery.
 
 ## Quick Start
 
+> **Important**: The provided Base Sepolia RPC URL (`https://base-sepolia.drpc.org`) is included as an example only. Public RPC endpoints typically have rate limits that will cause sync issues. You should replace it with your own RPC endpoint from a provider like [Alchemy](https://www.alchemy.com/), [Infura](https://www.infura.io/), or run your own Base Sepolia node.
+
 ```bash
 ./start-xmtp-ropsten
 ```
@@ -48,6 +69,19 @@ This exposes:
 
 Data is persisted in `./data`.
 
+## Hardware Requirements
+
+Arbitrum recommends the following minimum specifications for running a full node:
+
+| Resource | Recommended |
+| ---------- | ------------- |
+| RAM | 64 GB |
+| CPU | 8 core CPU (for AWS, an `i4i.2xlarge` instance) |
+| Storage Type | NVMe SSD (locally attached drives strongly recommended) |
+| Storage Size | Depends on the chain and its traffic over time |
+
+> **Note**: Archive nodes require significantly more storage than pruned nodes, as they retain all historical state.
+
 ## Configuration Parameters Explained
 
 ### Chain Configuration
@@ -56,7 +90,7 @@ Data is persisted in `./data`.
 | ------ | ------------- |
 | `--chain.info-json` | JSON containing chain config, rollup contract addresses, and genesis parameters |
 | `--chain.name` | Chain identifier (`xmtp-ropsten`) |
-| `--parent-chain.connection.url` | RPC endpoint for the parent chain (Base Sepolia) |
+| `--parent-chain.connection.url` | RPC endpoint for the parent chain (Base Sepolia). **Use a non-rate-limited RPC.** |
 
 ### Data Sources
 
@@ -108,6 +142,8 @@ Data is persisted in `./data`.
 | `--node.dangerous.disable-blob-reader` | Disable EIP-4844 blob reading (not used on this chain) |
 
 ## Snapshot Initialization (Optional)
+
+> Note: snapshots are not available for now, so syncing from genesis the default.
 
 To speed up initial sync, you can provide a snapshot:
 
