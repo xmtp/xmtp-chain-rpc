@@ -1,0 +1,6 @@
+{
+    "chain": {
+        "name": "xmtp-ropsten",
+        "info-json": "[{\"chain-id\":351243127,\"parent-chain-id\":84532,\"parent-chain-is-arbitrum\":false,\"chain-name\":\"xmtp-ropsten\",\"chain-config\":{\"homesteadBlock\":0,\"daoForkBlock\":null,\"daoForkSupport\":true,\"eip150Block\":0,\"eip150Hash\":\"0x0000000000000000000000000000000000000000000000000000000000000000\",\"eip155Block\":0,\"eip158Block\":0,\"byzantiumBlock\":0,\"constantinopleBlock\":0,\"petersburgBlock\":0,\"istanbulBlock\":0,\"muirGlacierBlock\":0,\"berlinBlock\":0,\"londonBlock\":0,\"clique\":{\"period\":0,\"epoch\":0},\"arbitrum\":{\"EnableArbOS\":true,\"AllowDebugPrecompiles\":false,\"DataAvailabilityCommittee\":true,\"InitialArbOSVersion\":32,\"GenesisBlockNum\":0,\"MaxCodeSize\":24576,\"MaxInitCodeSize\":49152,\"InitialChainOwner\":\"0x7cd1010c5c9a87b3b5c043ad01c10e46e584c695\"},\"chainId\":351243127},\"rollup\":{\"bridge\":\"0xD05baD3cec5E67152178F731aae8025fC1F2DAEA\",\"inbox\":\"0xA382f402Cb702484B424AC8e2B7fEE9B032C6b9d\",\"sequencer-inbox\":\"0x66513AD1844E9dc1268bB8cC2cbcc1F6BBA74B77\",\"rollup\":\"0xFE03FC0422F46f5C4169B8F33873B7955c3897a3\",\"validator-utils\":\"0x3d2BEE7E8ef53EefDD6C9a3b08447178EDeaA134\",\"validator-wallet-creator\":\"0x17Ba3F72377420a6855e542866fA6a5960D5Af69\",\"deployed-at\":28161729}}]"
+    }
+}
