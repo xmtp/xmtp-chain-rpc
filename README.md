@@ -46,13 +46,13 @@ There is no P2P gossip or enode-based peer discovery.
 
 ## XMTP Ropsten Network Details
 
-| Component | Value |
-| ----------- | ------- |
-| Chain ID | `351243127` |
-| Parent Chain | Base Sepolia (`84532`) |
-| Sequencer Feed | `wss://xmtp-ropsten-relay.rollups.alchemy.com` |
-| DA Mirror | `https://xmtp-ropsten-da-mirror.rollups.alchemy.com` |
-| Container Image | `offchainlabs/nitro-node:v3.9.4-7f582c3` |
+| Component       | Value                                                |
+| --------------- | ---------------------------------------------------- |
+| Chain ID        | `351243127`                                          |
+| Parent Chain    | Base Sepolia (`84532`)                               |
+| Sequencer Feed  | `wss://xmtp-ropsten-relay.rollups.alchemy.com`       |
+| DA Mirror       | `https://xmtp-ropsten-da-mirror.rollups.alchemy.com` |
+| Container Image | `offchainlabs/nitro-node:v3.9.4-7f582c3`             |
 
 ## Quick Start
 
@@ -73,72 +73,76 @@ Data is persisted in `./data`.
 
 Arbitrum recommends the following minimum specifications for running a full node:
 
-| Resource | Recommended |
-| ---------- | ------------- |
-| RAM | 64 GB |
-| CPU | 8 core CPU (for AWS, an `i4i.2xlarge` instance) |
+| Resource     | Recommended                                             |
+| ------------ | ------------------------------------------------------- |
+| RAM          | 64 GB                                                   |
+| CPU          | 8 core CPU (for AWS, an `i4i.2xlarge` instance)         |
 | Storage Type | NVMe SSD (locally attached drives strongly recommended) |
-| Storage Size | Depends on the chain and its traffic over time |
+| Storage Size | Depends on the chain and its traffic over time          |
 
-> **Note**: Archive nodes require significantly more storage than pruned nodes, as they retain all historical state.
+> [!NOTE]
+> Archive nodes require significantly more storage than pruned nodes, as they retain all historical state. While full archive nodes are recommended for complete historical access, **pruned nodes with ~6 months of data** are a valid alternative if storage is limited. See [Archive Mode](#archive-mode-for-indexers) for configuration details.
 
 ## Configuration Parameters Explained
 
 ### Chain Configuration
 
-| Flag | Description |
-| ------ | ------------- |
-| `--chain.info-json` | JSON containing chain config, rollup contract addresses, and genesis parameters |
-| `--chain.name` | Chain identifier (`xmtp-ropsten`) |
+| Flag                            | Description                                                                       |
+| ------------------------------- | --------------------------------------------------------------------------------- |
+| `--chain.info-json`             | JSON containing chain config, rollup contract addresses, and genesis parameters   |
+| `--chain.name`                  | Chain identifier (`xmtp-ropsten`)                                                 |
 | `--parent-chain.connection.url` | RPC endpoint for the parent chain (Base Sepolia). **Use a non-rate-limited RPC.** |
 
 ### Data Sources
 
-| Flag | Description |
-| ------ | ------------- |
-| `--node.feed.input.url` | WebSocket URL to receive new blocks from the sequencer |
-| `--node.data-availability.enable` | Enable Data Availability mode (required for DAC chains) |
-| `--node.data-availability.rest-aggregator.enable` | Enable fetching batch data via REST |
-| `--node.data-availability.rest-aggregator.urls` | DA mirror endpoint(s) for batch retrieval |
+| Flag                                              | Description                                             |
+| ------------------------------------------------- | ------------------------------------------------------- |
+| `--node.feed.input.url`                           | WebSocket URL to receive new blocks from the sequencer  |
+| `--node.data-availability.enable`                 | Enable Data Availability mode (required for DAC chains) |
+| `--node.data-availability.rest-aggregator.enable` | Enable fetching batch data via REST                     |
+| `--node.data-availability.rest-aggregator.urls`   | DA mirror endpoint(s) for batch retrieval               |
 
 ### Transaction Forwarding
 
-| Flag | Description |
-| ------ | ------------- |
+| Flag                            | Description                                            |
+| ------------------------------- | ------------------------------------------------------ |
 | `--execution.forwarding-target` | URL to forward submitted transactions to the sequencer |
 
 ### Archive Mode (for Indexers)
 
-| Flag | Description |
-| ------ | ------------- |
-| `--execution.caching.archive` | Retain historical state for queries at past blocks |
+| Flag                                       | Description                                             |
+| ------------------------------------------ | ------------------------------------------------------- |
+| `--execution.caching.archive`              | Retain historical state for queries at past blocks      |
 | `--execution.tx-indexer.tx-lookup-limit=0` | Keep transaction index for all blocks (`0` = unlimited) |
+
+> [!NOTE]
+> While a full archive node is recommended, a **pruned node with ~6 months of historical data** is also a valid option if storage is a constraint. To configure a pruned node, omit `--execution.caching.archive` and set `--execution.tx-indexer.tx-lookup-limit` to a non-zero value representing the number of blocks to retain (e.g., `--execution.tx-indexer.tx-lookup-limit=62208000` for ~6 months at 0.25s block time).
 
 ### Disabled Features (Read-Only Node)
 
-| Flag | Description |
-| ------ | ------------- |
-| `--execution.sequencer.enable=false` | Do not act as sequencer |
-| `--node.staker.enable=false` | Do not participate in validation/staking |
-| `--node.batch-poster.enable=false` | Do not post batches to L1 |
-| `--node.delayed-sequencer.enable=false` | Do not process delayed inbox messages |
+| Flag                                    | Description                              |
+| --------------------------------------- | ---------------------------------------- |
+| `--execution.sequencer.enable=false`    | Do not act as sequencer                  |
+| `--node.staker.enable=false`            | Do not participate in validation/staking |
+| `--node.batch-poster.enable=false`      | Do not post batches to L1                |
+| `--node.delayed-sequencer.enable=false` | Do not process delayed inbox messages    |
 
 ### RPC Exposure
 
-| Flag | Description |
-| ------ | ------------- |
-| `--http.addr=0.0.0.0` | Bind HTTP RPC to all interfaces |
-| `--http.api=net,web3,eth,debug,arb` | Enabled HTTP RPC namespaces |
-| `--http.corsdomain=*` | Allow CORS from any origin |
-| `--http.vhosts=*` | Accept requests for any hostname |
-| `--ws.addr=0.0.0.0` | Bind WebSocket to all interfaces |
-| `--ws.api=net,web3,eth,debug,arb` | Enabled WebSocket RPC namespaces |
-| `--ws.origins=*` | Allow WebSocket connections from any origin |
+| Flag                                | Description                                 |
+| ----------------------------------- | ------------------------------------------- |
+| `--http.addr=0.0.0.0`               | Bind HTTP RPC to all interfaces             |
+| `--http.api=net,web3,eth,debug,arb` | Enabled HTTP RPC namespaces                 |
+| `--http.corsdomain=*`               | Allow CORS from any origin                  |
+| `--http.vhosts=*`                   | Accept requests for any hostname            |
+| `--ws.addr=0.0.0.0`                 | Bind WebSocket to all interfaces            |
+| `--ws.api=net,web3,eth,debug,arb`   | Enabled WebSocket RPC namespaces            |
+| `--ws.origins=*`                    | Allow WebSocket connections from any origin |
 
 ### Other
 
-| Flag | Description |
-| ------ | ------------- |
+| Flag                                   | Description                                            |
+| -------------------------------------- | ------------------------------------------------------ |
 | `--node.dangerous.disable-blob-reader` | Disable EIP-4844 blob reading (not used on this chain) |
 
 ## Snapshot Initialization (Optional)
